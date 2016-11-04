@@ -5,15 +5,12 @@ const Path = require('path');
 var Web3 = require('web3');
 var locus = require('locus');
 var fs = require('fs');
-
 var config = require('config');
 
 var nodehost = config.get('nodehost');
 var rocport = config.get('rocport');
 var apphost = config.get('apphost');
 var appport = config.get('appport');
-
-
 
 var aadhar_data = JSON.parse(fs.readFileSync('mocked_aadhar_api.json', 'utf8'));
 
@@ -52,22 +49,13 @@ server.route({
     }
   },
   handler: function (request, reply) {
-    reply('ping');
+    reply('pong');
   }
 });
 
 
-
-
 function createServeWallet(password) {
-  var addr = web3.personal.newAccount(password);
-
-  var exec = require('child_process').exec;
-  var cmd = 'cd uploads && ag -g "'+ addr +'"';
-
-  exec(cmd, function(error, stdout, stderr) {
-    return "http://" + apphost + '/' + appport + '/keystore/'+stdout;
-  });
+  return web3.personal.newAccount(password);
 }
 
 server.route({
@@ -84,7 +72,7 @@ server.route({
 
 server.route({
   method: 'POST',
-  path: '/register',
+  path: '/validateaadhaar',
   config: {
     cors: {
       origin: ['*'],

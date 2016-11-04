@@ -22,7 +22,6 @@
   "dependencies": {
     "config": "^1.24.0",
     "hapi": "^15.2.0",
-    "hapi-cors-headers": "^1.0.0",
     "inert": "^4.0.2",
     "node-config-manager": "^1.0.4",
     "web3": "^0.17.0-beta"
