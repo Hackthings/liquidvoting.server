@@ -24,7 +24,8 @@ const server = new Hapi.Server({
       files: {
         relativeTo: Path.join(__dirname, 'uploads')
       }
-    }
+    },
+    cors: true
   }
 });
 server.ext('onPreResponse', addCorsHeaders);
