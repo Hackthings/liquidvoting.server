@@ -13,7 +13,7 @@ const server = new Hapi.Server({
   connections: {
     routes: {
       files: {
-        relativeTo: Path.join(__dirname, 'public')
+        relativeTo: Path.join(__dirname, 'uploads')
       }
     }
   }
