@@ -18,5 +18,12 @@
   "bugs": {
     "url": "https://github.com/liquidvoting/liquidvoting.github.io/issues"
   },
-  "homepage": "https://github.com/liquidvoting/liquidvoting.github.io#readme"
+  "homepage": "https://github.com/liquidvoting/liquidvoting.github.io#readme",
+  "dependencies": {
+    "hapi": "^15.2.0",
+    "inert": "^4.0.2"
+  },
+  "devDependencies": {
+    "locus": "^1.2.0"
+  }
 }
