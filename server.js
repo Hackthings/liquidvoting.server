@@ -88,14 +88,19 @@ server.route({
                     fs.readFile(filename, 'utf8', function(err, content) {
                       if (err) throw err;
                       var aadhar_id = request.payload.aadhar_id
-                      if(content == aadhar_data[aadhar_id]["fingerprint"]){
+                      if(aadhar_data[aadhar_id] == undefined){
+                        reply({
+                          "status": "error",
+                          "message": "aadhar_id invalid"
+                        }).code(402)
+                      }else if(content == aadhar_data[aadhar_id]["fingerprint"]){
                         
                         reply(content).type('text/csv') 
                       }else{
                         reply({
                           "status": "error",
-                          "message": "aadhar_id invalid"
-                        })
+                          "message": "aadhar_id and fingerprint do not match"
+                        }).code(402)
                       }
                       
                     });
