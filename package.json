@@ -21,9 +21,11 @@
   "homepage": "https://github.com/liquidvoting/liquidvoting.github.io#readme",
   "dependencies": {
     "hapi": "^15.2.0",
-    "inert": "^4.0.2"
+    "inert": "^4.0.2",
+    "web3": "^0.17.0-beta"
   },
   "devDependencies": {
-    "locus": "^1.2.0"
+    "locus": "^1.2.0",
+    "nodemon": "^1.11.0"
   }
 }
