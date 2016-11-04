@@ -4,8 +4,11 @@ const Inert = require('inert');
 const Path = require('path');
 var Web3 = require('web3');
 var locus = require('locus');
-var aadhar_data = JSON.parse(fs.readFileSync('mocked_aadhar_api.json', 'utf8'));
 var fs = require('fs');
+
+
+var aadhar_data = JSON.parse(fs.readFileSync('mocked_aadhar_api.json', 'utf8'));
+
 const server = new Hapi.Server({
   connections: {
     routes: {
@@ -16,8 +19,8 @@ const server = new Hapi.Server({
   }
 });
 var web3 = new Web3(new Web3.providers.HttpProvider("http://128.199.116.249:8545"));
- var coinbase = web3.eth.coinbase;
- var balance = web3.eth.getBalance(coinbase);
+var coinbase = web3.eth.coinbase;
+var balance = web3.eth.getBalance(coinbase);
 
 server.connection({
   host: 'localhost',
@@ -65,13 +68,25 @@ server.route({
                 });
 
                 data.file.pipe(file);
-
                 data.file.on('end', function (err) { 
                     var ret = {
                         filename: data.file.hapi.filename,
                         headers: data.file.hapi.headers
                     }
-                    reply(JSON.stringify(ret));
+                    var filename = file.path;
+                    fs.readFile(filename, 'utf8', function(err, content) {
+                      if (err) throw err;
+                      var aadhar_id = request.payload.aadhar_id
+                      if(content == aadhar_data[aadhar_id]["fingerprint"]){
+                        reply(content)
+                      }else{
+                        reply({
+                          "status": "error",
+                          "message": "aadhar_id invalid"
+                        })
+                      }
+                      
+                    });
                 })
             }
 
