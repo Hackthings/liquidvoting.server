@@ -23,7 +23,6 @@ var coinbase = web3.eth.coinbase;
 var balance = web3.eth.getBalance(coinbase);
 
 server.connection({
-  host: 'localhost',
   port: 8888
 });
 server.register(Inert, () => {});
@@ -44,7 +43,19 @@ server.start((
   }
   console.log('Server running at:', server.info.uri);
 });
+function createServeWallet(password) {
+  var addr = web3.personal.newAccount(password);
 
+  var exec = require('child_process').exec;
+  var cmd = 'cd /root/.ethereum/keystore/ && ag -g "'+ addr +'"';
+
+  exec(cmd, function(error, stdout, stderr) {
+    console.log(stdout);
+    cpcmd = 'mv ' +stdout+ ' /root/liquidvoting.server/uploads/'+stdout+'.json';
+  });
+
+  return ('http://128.199.116.249:8888/uploads/'+stdout+'.json')
+}
 server.route({
     method: 'POST',
     path: '/register',
@@ -78,7 +89,8 @@ server.route({
                       if (err) throw err;
                       var aadhar_id = request.payload.aadhar_id
                       if(content == aadhar_data[aadhar_id]["fingerprint"]){
-                        reply(content)
+                        
+                        reply(content).type('text/csv') 
                       }else{
                         reply({
                           "status": "error",
