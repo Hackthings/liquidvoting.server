@@ -1,0 +1,22 @@
+{
+  "name": "liquidvoting",
+  "version": "1.0.0",
+  "description": "Liquid Voting is a blockchain based voting/decision making platform",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/liquidvoting/liquidvoting.github.io.git"
+  },
+  "keywords": [
+    "liquidvoting"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/liquidvoting/liquidvoting.github.io/issues"
+  },
+  "homepage": "https://github.com/liquidvoting/liquidvoting.github.io#readme"
+}
