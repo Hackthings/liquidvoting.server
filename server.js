@@ -22,9 +22,11 @@ const server = new Hapi.Server({
     routes: {
       files: {
         relativeTo: Path.join(__dirname, 'uploads')
+      },
+      cors: {
+        origin: ['*']
       }
-    },
-    cors: true
+    }
   }
 });
 
