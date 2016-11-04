@@ -38,89 +38,87 @@ server.route({
 
 server.start((
   err) => {
-  if (err) {
-    throw err;
-  }
-  console.log('Server running at:', server.info.uri);
-});
+    if (err) {
+      throw err;
+    }
+    console.log('Server running at:', server.info.uri);
+  });
 
-function createServeWallet(password) {
-  var addr = web3.personal.newAccount(password);
+  function createServeWallet(password) {
+    var addr = web3.personal.newAccount(password);
 
-  var exec = require('child_process').exec;
-  var cmd = 'ag -g "'+ addr +'"';
-
+    var exec = require('child_process').exec;
+    var cmd = 'cd uploads && ag -g "'+ addr +'"';
 
     exec(cmd, function(error, stdout, stderr) {
-      cpcmd = 'http://128.199.116.249:8888/keystore/'+stdout;
-      reply(cpcmd);
+      return cpcmd = 'http://128.199.116.249:8888/keystore/'+stdout;
     });
   }
 
-server.route({
-  method: 'GET',
-  path: '/{param*}',
-  handler: {
-    directory: {
-      path: '.',
-      redirectToSlash: true,
-      index: true
+  server.route({
+    method: 'GET',
+    path: '/{param*}',
+    handler: {
+      directory: {
+        path: '.',
+        redirectToSlash: true,
+        index: true
+      }
     }
-  }
-});
+  });
 
-server.route({
+  server.route({
     method: 'POST',
     path: '/register',
     config: {
 
-        payload: {
-            output: 'stream',
-            parse: true,
-            allow: 'multipart/form-data'
-        },
+      payload: {
+        output: 'stream',
+        parse: true,
+        allow: 'multipart/form-data'
+      },
 
-        handler: function (request, reply) {
-            var data = request.payload;
-            if (data.file) {
-                var name = data.file.hapi.filename;
-                var path = __dirname + "/uploads/" + name;
-                var file = fs.createWriteStream(path);
+      handler: function (request, reply) {
+        var data = request.payload;
+        if (data.file) {
+          var name = data.file.hapi.filename;
+          var path = __dirname + "/uploads/" + name;
+          var file = fs.createWriteStream(path);
 
-                file.on('error', function (err) {
-                    console.error(err)
-                });
+          file.on('error', function (err) {
+            console.error(err)
+          });
 
-                data.file.pipe(file);
+          data.file.pipe(file);
 
-                data.file.on('end', function (err) {
-                    var ret = {
-                        filename: data.file.hapi.filename,
-                        headers: data.file.hapi.headers
-                    }
-                    var filename = file.path;
-                    fs.readFile(filename, 'utf8', function(err, content) {
-                      if (err) throw err;
-                      var aadhar_id = request.payload.aadhar_id
-                      if(aadhar_data[aadhar_id] == undefined){
-                        reply({
-                          "status": "error",
-                          "message": "aadhar_id invalid"
-                        }).code(402)
-                      }else if(content == aadhar_data[aadhar_id]["fingerprint"]){
-                        var wallet = createServeWallet('123');
-                        reply(wallet);
-                      }else{
-                        reply({
-                          "status": "error",
-                          "message": "aadhar_id and fingerprint do not match"
-                        }).code(402)
-                      }
-
-                    });
-                })
+          data.file.on('end', function (err) {
+            var ret = {
+              filename: data.file.hapi.filename,
+              headers: data.file.hapi.headers
             }
+            var filename = file.path;
+            fs.readFile(filename, 'utf8', function(err, content) {
+              if (err) throw err;
+              var aadhar_id = request.payload.aadhar_id
+              if(aadhar_data[aadhar_id] == undefined){
+                reply({
+                  "status": "error",
+                  "message": "aadhar_id invalid"
+                }).code(402)
+              }else if(content == aadhar_data[aadhar_id]["fingerprint"]){
+                var wallet = createServeWallet('123');
+                reply(wallet);
+              }else{
+                reply({
+                  "status": "error",
+                  "message": "aadhar_id and fingerprint do not match"
+                }).code(402)
+              }
 
+            });
+          })
         }
+
+      }
     }
-});
+  });
