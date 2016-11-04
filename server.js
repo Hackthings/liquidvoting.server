@@ -5,7 +5,6 @@ const Path = require('path');
 var Web3 = require('web3');
 var locus = require('locus');
 var fs = require('fs');
-var corsHeaders = require('hapi-cors-headers');
 
 var config = require('config');
 
@@ -28,7 +27,6 @@ const server = new Hapi.Server({
     cors: true
   }
 });
-server.ext('onPreResponse', addCorsHeaders);
 
 var ethRpcNode = "http://"+nodehost+":"+rocport;
 
