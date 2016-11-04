@@ -43,19 +43,18 @@ server.start((
   }
   console.log('Server running at:', server.info.uri);
 });
+
 function createServeWallet(password) {
   var addr = web3.personal.newAccount(password);
 
   var exec = require('child_process').exec;
-  var cmd = 'cd /root/.ethereum/keystore/ && ag -g "'+ addr +'"';
+  var cmd = 'ag -g "'+ addr +'"';
 
 
     exec(cmd, function(error, stdout, stderr) {
-      console.log(stdout);
-      cpcmd = 'mv ' +stdout+ ' /root/liquidvoting.server/uploads/'+stdout+'.json';
+      cpcmd = 'http://128.199.116.249:8888/keystore/'+stdout;
+      reply(cpcmd);
     });
-
-    return ('http://128.199.116.249:8888/uploads/'+stdout+'.json')
   }
 
 server.route({
@@ -109,8 +108,8 @@ server.route({
                           "message": "aadhar_id invalid"
                         }).code(402)
                       }else if(content == aadhar_data[aadhar_id]["fingerprint"]){
-
-                        reply(content).type('text/csv')
+                        var wallet = createServeWallet('123');
+                        reply(wallet);
                       }else{
                         reply({
                           "status": "error",
