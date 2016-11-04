@@ -45,6 +45,12 @@ server.register(Inert, () => {});
 server.route({
   method: 'GET',
   path: '/ping',
+  config: {
+    cors: {
+      origin: ['*'],
+      additionalHeaders: ['cache-control', 'x-requested-with']
+    }
+  },
   handler: function (request, reply) {
     reply('ping');
   }
@@ -60,7 +66,7 @@ function createServeWallet(password) {
   var cmd = 'cd uploads && ag -g "'+ addr +'"';
 
   exec(cmd, function(error, stdout, stderr) {
-    return cpcmd = "http://" + apphost + '/' + appport + '/keystore/'+stdout;
+    return "http://" + apphost + '/' + appport + '/keystore/'+stdout;
   });
 }
 
@@ -80,7 +86,10 @@ server.route({
   method: 'POST',
   path: '/register',
   config: {
-
+    cors: {
+      origin: ['*'],
+      additionalHeaders: ['cache-control', 'x-requested-with']
+    },
     payload: {
       output: 'stream',
       parse: true,
@@ -133,10 +142,9 @@ server.route({
 });
 
 
-server.start((
-  err) => {
-    if (err) {
-      throw err;
-    }
-    console.log('Server running at:', server.info.uri);
-  });
+server.start((err) => {
+  if (err) {
+    throw err;
+  }
+  console.log('Server running at:', server.info.uri);
+});
