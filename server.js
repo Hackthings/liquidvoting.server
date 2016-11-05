@@ -53,6 +53,20 @@ server.route({
   }
 });
 
+server.route({
+  method: 'GET',
+  path: '/',
+  config: {
+    cors: {
+      origin: ['*'],
+      additionalHeaders: ['cache-control', 'x-requested-with']
+    }
+  },
+  handler: function (request, reply) {
+    reply('Hello there');
+  }
+});
+
 
 function createServeWallet(password) {
   return web3.personal.newAccount(password);
